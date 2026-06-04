@@ -113,5 +113,4 @@ MIT License
 
 <p align="center">
   <strong>Nebula Editor</strong><br>
-  Programar sin distracciones.
 </p>
