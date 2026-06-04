@@ -1,74 +1,100 @@
-# Nebula JS
+# Nebula JS 🌌
 
 > Un entorno de desarrollo JavaScript ligero, rápido y accesible desde cualquier navegador.
 
-![Status](https://img.shields.io/badge/status-active-success)
-![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF)
-![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6)
-
-##  🌌, ¿Qué es Nebula JS?
-
-Nebula JS es un compilador y entorno de desarrollo JavaScript basado en la web diseñado para ejecutar, probar y experimentar con código de forma rápida sin necesidad de instalar software adicional.
-
-El proyecto nació de una necesidad muy simple: **aprender y programar durante clases virtuales sin disponer de un segundo monitor**.
-
-Mientras seguía cursos y tutorías, cambiar constantemente entre el navegador, el editor de código y la documentación interrumpía el flujo de aprendizaje. La solución fue crear una herramienta que permitiera escribir, ejecutar y visualizar resultados desde una única interfaz accesible desde cualquier dispositivo.
-
-Nebula JS busca ofrecer una experiencia limpia, rápida y enfocada, inspirada visualmente en herramientas modernas como Vercel, Linear, Notion y Cursor.
+![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
+![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-UI-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 
 ---
 
-##  Características actuales
+## ¿Qué es Nebula JS?
+
+**Nebula JS** es un entorno de desarrollo y ejecución de JavaScript basado en la web, diseñado para escribir, probar y experimentar código de forma rápida sin instalaciones ni configuraciones complejas.
+
+El proyecto nace de una necesidad real:  
+aprender y programar durante clases virtuales sin depender de un segundo monitor ni de cambiar constantemente de ventana.
+
+Su objetivo es mantener el flujo de aprendizaje intacto, permitiendo escribir, ejecutar y visualizar resultados en un solo lugar.
+
+Inspirado en herramientas modernas como Vercel, Linear, Notion y Cursor, Nebula JS busca ofrecer una experiencia minimalista, rápida y enfocada.
+
+---
+
+## Características
 
 ### Editor moderno
-
-* Integración con Monaco Editor.
-* Resaltado de sintaxis para JavaScript.
-* Diagnósticos en tiempo real.
-* Atajos de teclado.
-* Experiencia similar a VS Code.
+- Editor basado en Monaco Editor (estilo VS Code)
+- Resaltado de sintaxis para JavaScript
+- Diagnósticos en tiempo real
+- Atajos de teclado productivos
+- Experiencia fluida tipo IDE profesional
 
 ### Ejecución instantánea
-
-* Ejecución de código directamente en el navegador.
-* Entorno aislado mediante sandbox.
-* Actualización rápida del resultado.
+- Ejecución directa en el navegador
+- Entorno sandbox aislado
+- Feedback inmediato de resultados
+- Reinicio rápido de ejecución
 
 ### Consola integrada
-
-* Registro de mensajes.
-* Advertencias y errores.
-* Limpieza manual de la consola.
-* Contadores de errores y warnings.
+- Logs, warnings y errores en tiempo real
+- Limpieza manual de consola
+- Contadores de errores y advertencias
+- Seguimiento claro del output
 
 ### Productividad
+- Copiar código con un clic
+- Descarga de archivos `.js`
+- Persistencia con LocalStorage
+- Recuperación automática de sesiones
 
-* Copiar código al portapapeles.
-* Descarga de proyectos `.js`.
-* Persistencia automática mediante almacenamiento local.
-* Interfaz optimizada para sesiones de aprendizaje.
-
-### Diseño moderno
-
-* Tema oscuro.
-* Inspiración visual en Vercel y Linear.
-* Componentes minimalistas.
-* Feedback visual mediante notificaciones tipo toast.
+### Experiencia visual
+- Tema oscuro moderno
+- UI minimalista inspirada en herramientas dev modernas
+- Notificaciones tipo toast
+- Interfaz optimizada para aprendizaje
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Stack tecnológico
 
-* React
-* TypeScript
-* Vite
-* Monaco Editor
-* CSS Moderno
-* LocalStorage API
+- React
+- TypeScript
+- Vite
+- Monaco Editor
+- CSS moderno
+- LocalStorage API
 
 ---
 
-## 📦 Instalación
+## Estructura del Proyecto
+
+src/
+ ├─ components/
+ ├─ editor/
+ ├─ console/
+ ├─ hooks/
+ ├─ sandbox/
+ ├─ styles/
+ └─ main.tsx
+
+---
+
+## Roadmap
+
+- [x] JavaScript execution engine
+- [x] Monaco Editor integration
+- [x] Console system
+- [ ] Multi-file support
+- [ ] Live preview (HTML/CSS)
+- [ ] Cloud sync
+- [ ] Collaboration mode
+
+---
+
+
+## Instalación
 
 ```bash
 git clone https://github.com/tu-usuario/nebula-js.git
@@ -78,87 +104,7 @@ cd nebula-js
 npm install
 
 npm run dev
-```
 
-Para producción:
 
-```bash
-npm run build
-```
 
----
 
-## 🎯 Objetivos del proyecto
-
-Nebula JS no busca reemplazar a VS Code ni a otros IDEs completos.
-
-Su objetivo es ofrecer un entorno rápido para:
-
-* Aprender JavaScript.
-* Practicar conceptos.
-* Probar fragmentos de código.
-* Seguir cursos y tutorías.
-* Programar desde equipos con recursos limitados.
-* Trabajar desde cualquier navegador.
-
----
-
-## 🔮 Próximas mejoras
-
-### Editor
-
-* Sistema avanzado de sugerencias.
-* Quick Fixes.
-* Integración con ESLint.
-* Formateo automático.
-* Temas personalizables.
-
-### Consola
-
-* Filtrado por nivel.
-* Búsqueda de logs.
-* Exportación de registros.
-* Agrupación de mensajes.
-
-### Productividad
-
-* Múltiples archivos.
-* Pestañas de trabajo.
-* Proyectos guardados.
-* Importación y exportación de proyectos completos.
-
-### Experiencia de desarrollo
-
-* Soporte para HTML.
-* Soporte para CSS.
-* Vista previa combinada.
-* Plantillas predefinidas.
-* Snippets reutilizables.
-
-### Futuro
-
-* Compartir proyectos mediante enlaces.
-* Sistema de almacenamiento en la nube.
-* Colaboración en tiempo real.
-* Historial de versiones.
-* Asistente impulsado por IA.
-
----
-
-## 📖 Filosofía
-
-Nebula JS nace de la idea de que aprender y experimentar debería ser inmediato.
-
-Menos configuración.
-
-Menos interrupciones.
-
-Más tiempo escribiendo código.
-
----
-
-## 📄 Licencia
-
-Este proyecto se distribuye bajo la licencia MIT.
-
-Puedes utilizarlo, modificarlo y adaptarlo libremente respetando los términos de la licencia.
