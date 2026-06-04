@@ -1,110 +1,168 @@
-# Nebula JS 🌌
+# Nebula Editor
 
-> Un entorno de desarrollo JavaScript ligero, rápido y accesible desde cualquier navegador.
+> Un entorno de desarrollo JavaScript moderno, rápido y accesible desde cualquier navegador.
 
-![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
-![Vite](https://img.shields.io/badge/Vite-Frontend-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![React](https://img.shields.io/badge/React-UI-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+<p align="center">
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge\&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge\&logo=vite\&logoColor=white)
+![Monaco](https://img.shields.io/badge/Monaco_Editor-VS_Code-007ACC?style=for-the-badge)
+
+</p>
 
 ---
 
-## ¿Qué es Nebula JS?
+## Descripción
 
-**Nebula JS** es un entorno de desarrollo y ejecución de JavaScript basado en la web, diseñado para escribir, probar y experimentar código de forma rápida sin instalaciones ni configuraciones complejas.
+**Nebula Editor** es un entorno de desarrollo basado en la web que permite escribir, ejecutar y depurar código JavaScript sin necesidad de instalaciones ni configuraciones complejas.
 
-El proyecto nace de una necesidad real:  
-aprender y programar durante clases virtuales sin depender de un segundo monitor ni de cambiar constantemente de ventana.
+El proyecto surge de una necesidad concreta: disponer de un espacio de programación integrado mientras se estudia, se sigue una clase o se experimenta con nuevas ideas, evitando cambiar constantemente entre diferentes aplicaciones y ventanas.
 
-Su objetivo es mantener el flujo de aprendizaje intacto, permitiendo escribir, ejecutar y visualizar resultados en un solo lugar.
-
-Inspirado en herramientas modernas como Vercel, Linear, Notion y Cursor, Nebula JS busca ofrecer una experiencia minimalista, rápida y enfocada.
+Inspirado en herramientas modernas de desarrollo, Nebula prioriza la velocidad, la simplicidad y una experiencia de usuario limpia y enfocada.
 
 ---
 
 ## Características
 
 ### Editor moderno
-- Editor basado en Monaco Editor (estilo VS Code)
-- Resaltado de sintaxis para JavaScript
-- Diagnósticos en tiempo real
-- Atajos de teclado productivos
-- Experiencia fluida tipo IDE profesional
+
+* Integración con Monaco Editor (motor de VS Code)
+* Resaltado de sintaxis para JavaScript
+* Diagnósticos y validaciones en tiempo real
+* Atajos de teclado productivos
+* Experiencia fluida y profesional
 
 ### Ejecución instantánea
-- Ejecución directa en el navegador
-- Entorno sandbox aislado
-- Feedback inmediato de resultados
-- Reinicio rápido de ejecución
+
+* Ejecución directa en el navegador
+* Entorno aislado para pruebas seguras
+* Resultados inmediatos
+* Reinicio rápido de sesiones
 
 ### Consola integrada
-- Logs, warnings y errores en tiempo real
-- Limpieza manual de consola
-- Contadores de errores y advertencias
-- Seguimiento claro del output
+
+* Visualización de logs en tiempo real
+* Gestión de errores y advertencias
+* Seguimiento claro de la ejecución
+* Limpieza rápida de consola
 
 ### Productividad
-- Copiar código con un clic
-- Descarga de archivos `.js`
-- Persistencia con LocalStorage
-- Recuperación automática de sesiones
 
-### Experiencia visual
-- Tema oscuro moderno
-- UI minimalista inspirada en herramientas dev modernas
-- Notificaciones tipo toast
-- Interfaz optimizada para aprendizaje
+* Copiar código con un clic
+* Descarga de archivos `.js`
+* Persistencia automática mediante LocalStorage
+* Recuperación de sesiones al recargar
 
----
+### Interfaz
 
-## Stack tecnológico
-
-- React
-- TypeScript
-- Vite
-- Monaco Editor
-- CSS moderno
-- LocalStorage API
+* Tema oscuro moderno
+* Diseño minimalista
+* Notificaciones integradas
+* Experiencia optimizada para aprendizaje y práctica
 
 ---
 
-## Estructura del Proyecto
+## Vista previa
 
+<p align="center">
+  <img src="./public/preview.png" alt="Nebula Editor" width="100%">
+</p>
+
+> Reemplaza la imagen por una captura actual del proyecto.
+
+---
+
+## Tecnologías utilizadas
+
+* React
+* TypeScript
+* Vite
+* Monaco Editor
+* CSS
+* LocalStorage API
+
+---
+
+## Estructura del proyecto
+
+```bash
 src/
- ├─ components/
- ├─ editor/
- ├─ console/
- ├─ hooks/
- ├─ sandbox/
- ├─ styles/
- └─ main.tsx
+├── components/
+├── editor/
+├── console/
+├── hooks/
+├── sandbox/
+├── styles/
+└── main.tsx
+```
 
 ---
-
-## Roadmap
-
-- [x] JavaScript execution engine
-- [x] Monaco Editor integration
-- [x] Console system
-- [ ] Multi-file support
-- [ ] Live preview (HTML/CSS)
-- [ ] Cloud sync
-- [ ] Collaboration mode
-
----
-
 
 ## Instalación
 
 ```bash
-git clone https://github.com/tu-usuario/nebula-js.git
+git clone https://github.com/lenithb/nebula-editor.git
 
-cd nebula-js
+cd nebula-editor
 
 npm install
 
 npm run dev
+```
 
+---
 
+## Hoja de ruta
 
+### Implementado
+
+* [x] Motor de ejecución JavaScript
+* [x] Integración con Monaco Editor
+* [x] Consola interactiva
+* [x] Persistencia local
+* [x] Exportación de archivos
+
+### Próximamente
+
+* [ ] Soporte para múltiples archivos
+* [ ] Vista previa HTML y CSS
+* [ ] Sincronización en la nube
+* [ ] Personalización de temas
+* [ ] Compartir proyectos mediante enlace
+* [ ] Colaboración en tiempo real
+* [ ] Asistencia mediante IA
+
+---
+
+## Filosofía
+
+Nebula Editor busca ofrecer una experiencia de programación sencilla y accesible, eliminando barreras innecesarias para quienes están aprendiendo, enseñando o prototipando ideas rápidamente.
+
+Su objetivo es proporcionar un entorno ligero, intuitivo y enfocado exclusivamente en escribir código y obtener resultados de forma inmediata.
+
+---
+
+## Contribuciones
+
+Las contribuciones, sugerencias y reportes de errores son bienvenidos.
+
+Si deseas colaborar con el proyecto:
+
+1. Haz un fork del repositorio.
+2. Crea una rama para tu mejora.
+3. Realiza los cambios.
+4. Envía un Pull Request.
+
+---
+
+## Licencia
+
+Este proyecto se distribuye bajo la licencia MIT.
+
+---
+
+<p align="center">
+Nebula Editor · Programar sin distracciones
+</p>
 
