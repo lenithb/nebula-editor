@@ -11,26 +11,26 @@ import type { ConsoleLevel } from "./hooks/useConsole";
 const DEFAULT_CODE = `console.log("Hello from Nebula JS ✦");
 
 document.body.innerHTML = \`
-<div style="font-family:'Poppins',system-ui,sans-serif;padding:3rem;max-width:640px;background:#09090b;min-height:100vh;color:#fafafa">
+<div style="font-family:'Poppins',system-ui,sans-serif;padding:3rem;max-width:640px;background:#000;min-height:100vh;color:#fafafa">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:2.5rem">
     <svg width="28" height="28" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="13" cy="13" r="12" stroke="#27272a" stroke-width="1" fill="#09090b"/>
-      <circle cx="13" cy="13" r="7" stroke="#6366f1" stroke-width="1" fill="none" stroke-dasharray="3 2" opacity="0.5"/>
-      <circle cx="13" cy="13" r="4" fill="#818cf8"/>
-      <circle cx="13" cy="13" r="1.5" fill="#09090b"/>
+      <circle cx="13" cy="13" r="12" stroke="#2a2a2a" stroke-width="1" fill="#000"/>
+      <circle cx="13" cy="13" r="7" stroke="#f5f5f5" stroke-width="1" fill="none" stroke-dasharray="3 2" opacity="0.55"/>
+      <circle cx="13" cy="13" r="4" fill="#fff"/>
+      <circle cx="13" cy="13" r="1.5" fill="#000"/>
     </svg>
     <div>
       <h1 style="margin:0;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:#fafafa">Nebula JS</h1>
       <p style="margin:0;font-size:11px;color:#52525b;font-weight:400">Write. Run. Explore.</p>
     </div>
   </div>
-  <div style="background:#141416;border:1px solid #27272a;border-radius:8px;padding:1.25rem;margin-bottom:1rem">
-    <p style="margin:0 0 6px;font-size:10px;color:#6366f1;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Status</p>
+  <div style="background:#0a0a0a;border:1px solid #242424;border-radius:8px;padding:1.25rem;margin-bottom:1rem">
+    <p style="margin:0 0 6px;font-size:10px;color:#f5f5f5;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Status</p>
     <p style="margin:0;font-size:14px;color:#fafafa;font-weight:500">Your code is running successfully.</p>
   </div>
   <p style="font-size:12px;color:#52525b;margin:0;line-height:1.7">
     Edit the code in the editor and press
-    <kbd style="background:#141416;border:1px solid #27272a;border-radius:4px;padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;color:#818cf8">Ctrl+Enter</kbd>
+    <kbd style="background:#0a0a0a;border:1px solid #242424;border-radius:4px;padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;color:#f5f5f5">Ctrl+Enter</kbd>
     to run it.
   </p>
 </div>
