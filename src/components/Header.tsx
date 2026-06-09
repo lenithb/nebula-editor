@@ -65,22 +65,22 @@ export function Header({ code, onRun, onClear, runStatus }: HeaderProps) {
             cx="13"
             cy="13"
             r="12"
-            stroke="#27272a"
+            stroke="#2a2a2a"
             strokeWidth="1"
-            fill="#09090b"
+            fill="#000"
           />
           <circle
             cx="13"
             cy="13"
             r="7"
-            stroke="#6366f1"
+            stroke="#f5f5f5"
             strokeWidth="1"
             fill="none"
             strokeDasharray="3 2"
-            opacity="0.5"
+            opacity="0.55"
           />
-          <circle cx="13" cy="13" r="4" fill="#818cf8" />
-          <circle cx="13" cy="13" r="1.5" fill="#09090b" />
+          <circle cx="13" cy="13" r="4" fill="#fff" />
+          <circle cx="13" cy="13" r="1.5" fill="#000" />
         </svg>
         <div>
           <div className="header-title">Nebula JS</div>
