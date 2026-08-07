@@ -1,116 +1,70 @@
-# Nebula Editor 🌌
-
-> Un entorno de desarrollo JavaScript ligero, rápido y accesible desde cualquier navegador.
-
 <p align="center">
-
-![Status](https://img.shields.io/badge/status-active-success?style=for-the-badge)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge\&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge\&logo=vite\&logoColor=white)
-![Monaco](https://img.shields.io/badge/Monaco_Editor-VS_Code-007ACC?style=for-the-badge)
-
+  <img src="./nebula.png" width="86" alt="Nebula Editor" />
 </p>
 
----
+<h1 align="center">Nebula Editor</h1>
 
-## ¿Qué es Nebula Editor?
+<p align="center">
+  Un playground de JavaScript rápido, oscuro y sin distracciones.<br />
+  <code>Write.</code> <code>Run.</code> <code>Explore.</code>
+</p>
 
-**Nebula Editor** es un entorno de desarrollo y ejecución de JavaScript basado en la web, diseñado para escribir, probar y experimentar código sin instalaciones ni configuraciones complejas.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18-111111?style=flat-square&logo=react&logoColor=white" alt="React 18" />
+  <img src="https://img.shields.io/badge/TypeScript-5-111111?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript 5" />
+  <img src="https://img.shields.io/badge/Monaco-Editor-111111?style=flat-square&logo=visualstudiocode&logoColor=white" alt="Monaco Editor" />
+  <img src="https://img.shields.io/badge/Vite-5-111111?style=flat-square&logo=vite&logoColor=white" alt="Vite 5" />
+</p>
 
-Nació de una necesidad simple: poder aprender y programar desde un único lugar, sin perder tiempo cambiando constantemente entre ventanas o aplicaciones.
+<p align="center">
+  <img src="./nebulascreen.png" alt="Interfaz de Nebula Editor" width="100%" />
+</p>
 
----
+## `> about`
 
-## Características
+Nebula permite escribir y ejecutar JavaScript directamente en el navegador. Incluye editor profesional, preview aislada y consola integrada en una interfaz inspirada en Zed.
 
-* Editor basado en Monaco Editor (VS Code)
-* Resaltado de sintaxis y diagnósticos en tiempo real
-* Ejecución instantánea en el navegador
-* Consola integrada para logs y errores
-* Persistencia automática con LocalStorage
-* Copia y descarga de archivos `.js`
-* Tema oscuro y diseño minimalista
+## `> features`
 
----
+- Monaco Editor con autocompletado, formato y diagnósticos.
+- Ejecución segura dentro de un sandbox.
+- Preview adaptable a escritorio, tablet y móvil.
+- Consola con filtros para logs, warnings y errores.
+- Fuente y tamaño del editor configurables.
+- Guardado automático de código y preferencias en `localStorage`.
+- Copia y descarga rápida del archivo `project.js`.
 
----
+## `> shortcuts`
 
-## Tecnologías utilizadas
+| Acción | Atajo |
+| --- | --- |
+| Ejecutar código | `Ctrl/Cmd + Enter` |
+| Formatear documento | `Ctrl/Cmd + S` |
+| Mostrar u ocultar consola | `Ctrl/Cmd + J` |
 
-* React
-* TypeScript
-* Vite
-* Monaco Editor
-* CSS
-* LocalStorage API
-
----
-
-## Estructura del proyecto
-
-```bash
-src/
-├── components/
-├── editor/
-├── console/
-├── hooks/
-├── sandbox/
-├── styles/
-└── main.tsx
-```
-
-<img width="1117" height="327" alt="mermaid-diagram" src="https://github.com/user-attachments/assets/44440c51-1c7c-4245-a80b-1248423f8d3b" />
-
-
----
-
-## Instalación
+## `> run locally`
 
 ```bash
 git clone https://github.com/lenithb/nebula-editor.git
-
 cd nebula-editor
-
 npm install
-
 npm run dev
 ```
 
----
+Para generar la versión de producción:
 
-## Roadmap
+```bash
+npm run build
+```
 
-* [x] Motor de ejecución JavaScript
-* [x] Integración con Monaco Editor
-* [x] Consola interactiva
-* [x] Persistencia local
-* [ ] Soporte para múltiples archivos
-* [ ] Vista previa HTML/CSS
-* [ ] Sincronización en la nube
-* [ ] Colaboración en tiempo real
-* [ ] Asistente con IA
+## `> next`
 
----
-
-## Filosofía
-
-Nebula busca ofrecer una experiencia de programación rápida, simple y sin distracciones para aprender, practicar y experimentar con JavaScript.
-
----
-
-## Contribuciones
-
-Las contribuciones y sugerencias son bienvenidas. Si deseas colaborar, abre un issue o envía un Pull Request.
-
----
-
-## Licencia
-
-MIT License
+- Temas completamente personalizables.
+- Soporte para múltiples archivos.
+- Sincronización y colaboración.
 
 ---
 
 <p align="center">
-  <strong>Nebula Editor</strong><br>
+  Hecho con React, TypeScript y Monaco Editor.
 </p>
