@@ -40,7 +40,8 @@ console.warn("This is a warning example");
 
 type RunStatus = "idle" | "running" | "success" | "error";
 
-const STORAGE_VERSION = "v3";
+// v4 starts from the current welcome example once, then resumes local auto-save.
+const STORAGE_VERSION = "v4";
 (function migrateStoredCode() {
   const storedVersion = localStorage.getItem("nebula-js:version");
   if (storedVersion === STORAGE_VERSION) return;
