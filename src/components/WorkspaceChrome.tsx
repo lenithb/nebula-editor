@@ -1,15 +1,21 @@
+import { JavaScriptIcon } from "./JavaScriptIcon";
+
 interface ActivityBarProps {
   sidebarOpen: boolean;
+  previewOpen: boolean;
   consoleOpen: boolean;
   onToggleSidebar: () => void;
+  onTogglePreview: () => void;
   onToggleConsole: () => void;
   onRun: () => void;
 }
 
 export function ActivityBar({
   sidebarOpen,
+  previewOpen,
   consoleOpen,
   onToggleSidebar,
+  onTogglePreview,
   onToggleConsole,
   onRun,
 }: ActivityBarProps) {
@@ -34,6 +40,15 @@ export function ActivityBar({
           <RunIcon />
         </button>
         <button
+          className={`activity-button ${previewOpen ? "active" : ""}`}
+          onClick={onTogglePreview}
+          aria-label="Toggle preview"
+          aria-pressed={previewOpen}
+          data-tooltip="Preview"
+        >
+          <PreviewIcon />
+        </button>
+        <button
           className={`activity-button ${consoleOpen ? "active" : ""}`}
           onClick={onToggleConsole}
           aria-label="Toggle console"
@@ -44,9 +59,7 @@ export function ActivityBar({
         </button>
       </div>
 
-      <div className="activity-language" aria-label="JavaScript workspace">
-        JS
-      </div>
+      <JavaScriptIcon className="activity-language" />
     </nav>
   );
 }
@@ -79,7 +92,7 @@ export function ProjectSidebar({ open, onClose }: ProjectSidebarProps) {
           <span>Nebula workspace</span>
         </div>
         <button className="project-file active" aria-current="page">
-          <span className="file-type-icon">JS</span>
+          <JavaScriptIcon className="file-type-icon" />
           <span>project.js</span>
           <span className="file-saved-dot" aria-label="Saved locally" />
         </button>
@@ -119,6 +132,15 @@ function TerminalIcon() {
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.45">
       <rect x="2.75" y="4" width="14.5" height="12" rx="2" />
       <path d="m6 8 2.25 2L6 12M10.5 12h3.5" />
+    </svg>
+  );
+}
+
+function PreviewIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.45">
+      <rect x="2.5" y="3.5" width="15" height="11.5" rx="2" />
+      <path d="M2.5 7h15M7.5 17h5M10 15v2" />
     </svg>
   );
 }

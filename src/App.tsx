@@ -6,6 +6,7 @@ import { ActivityBar, ProjectSidebar } from "./components/WorkspaceChrome";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useConsole } from "./hooks/useConsole";
 import type { ConsoleLevel } from "./hooks/useConsole";
+import { JavaScriptIcon } from "./components/JavaScriptIcon";
 
 const Editor = lazy(() =>
   import("./components/Editor").then((module) => ({ default: module.Editor })),
@@ -82,6 +83,10 @@ export function App() {
   );
   const [sidebarOpen, setSidebarOpen] = useLocalStorage(
     "nebula-js:sidebar-open",
+    true,
+  );
+  const [previewOpen, setPreviewOpen] = useLocalStorage(
+    "nebula-js:preview-open",
     true,
   );
 
@@ -187,8 +192,10 @@ export function App() {
         <div className="workbench">
           <ActivityBar
             sidebarOpen={sidebarOpen}
+            previewOpen={previewOpen}
             consoleOpen={!consoleCollapsed}
             onToggleSidebar={() => setSidebarOpen((open) => !open)}
+            onTogglePreview={() => setPreviewOpen((open) => !open)}
             onToggleConsole={() => setConsoleCollapsed((collapsed) => !collapsed)}
             onRun={handleRun}
           />
@@ -198,10 +205,13 @@ export function App() {
           />
 
           <main className="workspace">
-            <div className="workspace-panels" ref={workspaceRef}>
+            <div
+              className={`workspace-panels ${previewOpen ? "" : "preview-closed"}`}
+              ref={workspaceRef}
+            >
               <div
                 className="editor-pane"
-                style={{ width: `${editorWidthPct}%` }}
+                style={{ width: previewOpen ? `${editorWidthPct}%` : "100%" }}
               >
                 <Suspense fallback={<EditorShellLoading />}>
                   <Editor
@@ -212,27 +222,32 @@ export function App() {
                 </Suspense>
               </div>
 
-              <div
-                className="resize-handle-vertical"
-                onMouseDown={handleVerticalResizeMouseDown}
-                onKeyDown={handleVerticalResizeKeyDown}
-                role="separator"
-                aria-label="Resize editor and preview"
-                aria-orientation="vertical"
-                aria-valuemin={28}
-                aria-valuemax={78}
-                aria-valuenow={Math.round(editorWidthPct)}
-                tabIndex={0}
-              />
+              {previewOpen && (
+                <>
+                  <div
+                    className="resize-handle-vertical"
+                    onMouseDown={handleVerticalResizeMouseDown}
+                    onKeyDown={handleVerticalResizeKeyDown}
+                    role="separator"
+                    aria-label="Resize editor and preview"
+                    aria-orientation="vertical"
+                    aria-valuemin={28}
+                    aria-valuemax={78}
+                    aria-valuenow={Math.round(editorWidthPct)}
+                    tabIndex={0}
+                  />
 
-              <div className="preview-pane">
-                <Preview
-                  code={code}
-                  runKey={runKey}
-                  onRun={handleRun}
-                  onConsoleMessage={handleConsoleMessage}
-                />
-              </div>
+                  <div className="preview-pane">
+                    <Preview
+                      code={code}
+                      runKey={runKey}
+                      onRun={handleRun}
+                      onClose={() => setPreviewOpen(false)}
+                      onConsoleMessage={handleConsoleMessage}
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
             <Console
@@ -256,7 +271,7 @@ function EditorShellLoading() {
     <div className="panel editor-panel">
       <div className="editor-tabs">
         <div className="editor-tab active">
-          <span className="file-type-icon">JS</span>
+          <JavaScriptIcon className="file-type-icon" />
           <span>project.js</span>
         </div>
       </div>

@@ -1,4 +1,8 @@
-export function downloadFile(content: string, filename: string, mimeType = "text/javascript"): void {
+export function downloadFile(
+  content: string,
+  filename: string,
+  mimeType = "text/javascript",
+): void {
   const blob = new Blob([content], { type: mimeType });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");

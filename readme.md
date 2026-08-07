@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./nebula.png" width="86" alt="Nebula Editor" />
+  <img src="./src/assets/logos/nebula.png" width="86" alt="Nebula Editor" />
 </p>
 
 <h1 align="center">Nebula Editor</h1>

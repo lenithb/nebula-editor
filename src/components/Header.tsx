@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { downloadFile } from "../utils/download";
+import nebulaLogo from "../assets/logos/nebula.png";
 
 type RunStatus = "idle" | "running" | "success" | "error";
 
@@ -71,7 +72,7 @@ export function Header({
         >
           <SidebarIcon />
         </button>
-        <img className="header-logo" src="/nebula.png" alt="" />
+        <img className="header-logo" src={nebulaLogo} alt="" />
         <div className="header-product">
           <span className="header-title">Nebula</span>
           <span className="header-separator">/</span>

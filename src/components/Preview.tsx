@@ -6,12 +6,19 @@ interface PreviewProps {
   code: string;
   runKey: number;
   onRun: () => void;
+  onClose: () => void;
   onConsoleMessage: (level: ConsoleLevel, message: string) => void;
 }
 
 type Viewport = "desktop" | "tablet" | "mobile";
 
-export function Preview({ code, runKey, onRun, onConsoleMessage }: PreviewProps) {
+export function Preview({
+  code,
+  runKey,
+  onRun,
+  onClose,
+  onConsoleMessage,
+}: PreviewProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [viewport, setViewport] = useState<Viewport>("desktop");
   const hasRun = runKey > 0;
@@ -101,6 +108,14 @@ export function Preview({ code, runKey, onRun, onConsoleMessage }: PreviewProps)
               live
             </span>
           )}
+          <button
+            className="panel-action-button"
+            onClick={onClose}
+            aria-label="Close preview"
+            data-tooltip="Close preview"
+          >
+            <CloseIcon />
+          </button>
         </div>
       </div>
 
@@ -191,6 +206,14 @@ function RefreshIcon() {
     <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
       <path d="M11.25 5A4.75 4.75 0 1 0 11 9.5" />
       <path d="M11.25 2v3h-3" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round">
+      <path d="m3.5 3.5 7 7m0-7-7 7" />
     </svg>
   );
 }

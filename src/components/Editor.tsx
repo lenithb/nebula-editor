@@ -3,6 +3,7 @@ import MonacoEditor, { OnMount } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import "../monaco";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { JavaScriptIcon } from "./JavaScriptIcon";
 
 const EDITOR_FONTS = [
   {
@@ -33,9 +34,14 @@ interface EditorProps {
 
 export function Editor({ code, onChange, onRun }: EditorProps) {
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
+  const applyThemeRef = useRef<(backgroundVisible: boolean) => void>(() => {});
   const settingsRef = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState({ line: 1, column: 1 });
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showNebulaBackground, setShowNebulaBackground] = useLocalStorage(
+    "nebula-js:editor-background",
+    true,
+  );
   const [fontId, setFontId] = useLocalStorage<EditorFontId>(
     "nebula-js:editor-font",
     "jetbrains",
@@ -49,6 +55,10 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
   const safeFontSize = Number.isFinite(fontSize)
     ? Math.max(12, Math.min(20, fontSize))
     : 13.5;
+
+  useEffect(() => {
+    applyThemeRef.current(showNebulaBackground);
+  }, [showNebulaBackground]);
 
   useEffect(() => {
     if (!settingsOpen) return;
@@ -74,7 +84,7 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
     (editor, monaco) => {
       editorRef.current = editor;
 
-      monaco.editor.defineTheme("nebula", {
+      const nebulaTheme: Monaco.editor.IStandaloneThemeData = {
         base: "vs-dark",
         inherit: true,
         rules: [
@@ -141,9 +151,25 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
           "editorWidget.background": "#111112",
           "editorWidget.border": "#29292C",
         },
+      };
+
+      monaco.editor.defineTheme("nebula", nebulaTheme);
+      monaco.editor.defineTheme("nebula-watermark", {
+        ...nebulaTheme,
+        colors: {
+          ...nebulaTheme.colors,
+          "editor.background": "#00000000",
+          "editorGutter.background": "#00000000",
+          "editorOverviewRuler.border": "#00000000",
+        },
       });
 
-      monaco.editor.setTheme("nebula");
+      applyThemeRef.current = (backgroundVisible) => {
+        monaco.editor.setTheme(
+          backgroundVisible ? "nebula-watermark" : "nebula",
+        );
+      };
+      applyThemeRef.current(showNebulaBackground);
 
       editor.onDidChangeCursorPosition(({ position }) => {
         setCursor({ line: position.lineNumber, column: position.column });
@@ -164,14 +190,14 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
       );
 
     },
-    [onRun],
+    [onRun, showNebulaBackground],
   );
 
   return (
     <div className="panel editor-panel" style={{ width: "100%", flex: 1 }}>
       <div className="editor-tabs" role="tablist" aria-label="Open files">
         <div className="editor-tab active" role="tab" aria-selected="true">
-          <span className="file-type-icon">JS</span>
+          <JavaScriptIcon className="file-type-icon" />
           <span>project.js</span>
           <span className="tab-saved" data-tooltip="Saved locally" />
         </div>
@@ -181,6 +207,23 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
             <span className="context-dot" />
             Auto-save
           </div>
+          <button
+            className={`editor-settings-button ${showNebulaBackground ? "active" : ""}`}
+            onClick={() => setShowNebulaBackground((visible) => !visible)}
+            aria-label={
+              showNebulaBackground
+                ? "Hide Nebula editor background"
+                : "Show Nebula editor background"
+            }
+            aria-pressed={showNebulaBackground}
+            data-tooltip={
+              showNebulaBackground
+                ? "Hide Nebula background"
+                : "Show Nebula background"
+            }
+          >
+            <ImageIcon />
+          </button>
           <button
             className={`editor-settings-button ${settingsOpen ? "active" : ""}`}
             onClick={() => setSettingsOpen((open) => !open)}
@@ -248,7 +291,10 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
         </div>
       </div>
 
-      <div className="editor-body">
+      <div
+        className={`editor-body ${showNebulaBackground ? "with-nebula-background" : ""}`}
+      >
+        <div className="editor-watermark" aria-hidden="true" />
         <MonacoEditor
           height="100%"
           width="100%"
@@ -342,6 +388,16 @@ function TypographyIcon() {
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
       <path d="M2.5 4V2.5h7V4M6 2.5v9M4.25 11.5h3.5" />
       <path d="M10 7.5h3.5M11.75 5.75v3.5M10.25 12.5h3" opacity=".72" />
+    </svg>
+  );
+}
+
+function ImageIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+      <rect x="2.25" y="2.75" width="11.5" height="10.5" rx="1.5" />
+      <circle cx="10.75" cy="5.75" r="1.25" />
+      <path d="m3.25 11 3-3 2.25 2 1.25-1.25 3 2.75" />
     </svg>
   );
 }
