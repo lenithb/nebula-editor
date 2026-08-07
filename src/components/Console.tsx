@@ -8,7 +8,11 @@ interface ConsoleProps {
   warnCount: number;
   height: number;
   onHeightChange: (h: number) => void;
+  collapsed: boolean;
+  onCollapsedChange: (collapsed: boolean) => void;
 }
+
+type ConsoleFilter = "all" | "error" | "warn";
 
 export function Console({
   entries,
@@ -17,9 +21,12 @@ export function Console({
   warnCount,
   height,
   onHeightChange,
+  collapsed,
+  onCollapsedChange,
 }: ConsoleProps) {
+  const collapsedHeight = 40;
   const bodyRef = useRef<HTMLDivElement>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [filter, setFilter] = useState<ConsoleFilter>("all");
   const isDraggingRef = useRef(false);
   const startYRef = useRef(0);
   const startHeightRef = useRef(0);
@@ -29,6 +36,17 @@ export function Console({
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
     }
   }, [entries, collapsed]);
+
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "j") {
+        event.preventDefault();
+        onCollapsedChange(!collapsed);
+      }
+    };
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, [collapsed, onCollapsedChange]);
 
   function handleResizeMouseDown(e: React.MouseEvent) {
     isDraggingRef.current = true;
@@ -58,6 +76,13 @@ export function Console({
     window.addEventListener("mouseup", handleMouseUp);
   }
 
+  function handleResizeKeyDown(e: React.KeyboardEvent) {
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+    e.preventDefault();
+    const delta = e.key === "ArrowUp" ? 16 : -16;
+    onHeightChange(Math.max(120, Math.min(520, height + delta)));
+  }
+
   const countClass =
     errorCount > 0
       ? "has-errors"
@@ -74,28 +99,74 @@ export function Console({
     });
   };
 
+  const visibleEntries = entries.filter((entry) => {
+    if (filter === "all") return true;
+    return entry.level === filter;
+  });
+
   return (
     <div
       className="console-panel"
-      style={{ height: collapsed ? 38 : height, minHeight: collapsed ? 38 : 120 }}
+      style={{
+        height: collapsed ? collapsedHeight : height,
+        minHeight: collapsed ? collapsedHeight : 120,
+      }}
     >
       <div
         className="resize-handle-horizontal"
         onMouseDown={handleResizeMouseDown}
+        onKeyDown={handleResizeKeyDown}
+        role="separator"
+        aria-label="Resize console"
+        aria-orientation="horizontal"
+        aria-valuemin={120}
+        aria-valuemax={520}
+        aria-valuenow={height}
+        tabIndex={collapsed ? -1 : 0}
         style={{ display: collapsed ? "none" : "block" }}
       />
 
-      <div className="console-header" onClick={() => setCollapsed((c) => !c)}>
+      <div className="console-header">
         <div className="console-header-left">
-          <div className="console-title">
-            <span style={{ color: "var(--text-muted)", display: "flex", alignItems: "center" }}>
+          <button
+            className="console-title"
+            onClick={() => onCollapsedChange(!collapsed)}
+            aria-expanded={!collapsed}
+          >
+            <span className="console-title-icon">
               <TerminalIcon />
             </span>
             Console
-          </div>
+          </button>
           <span className={`console-count ${countClass}`}>
             {entries.length}
           </span>
+          {!collapsed && entries.length > 0 && (
+            <div className="console-filters" aria-label="Filter console output">
+              <button
+                className={filter === "all" ? "active" : ""}
+                onClick={() => setFilter("all")}
+              >
+                All
+              </button>
+              {errorCount > 0 && (
+                <button
+                  className={`error ${filter === "error" ? "active" : ""}`}
+                  onClick={() => setFilter("error")}
+                >
+                  {errorCount} error{errorCount === 1 ? "" : "s"}
+                </button>
+              )}
+              {warnCount > 0 && (
+                <button
+                  className={`warn ${filter === "warn" ? "active" : ""}`}
+                  onClick={() => setFilter("warn")}
+                >
+                  {warnCount} warning{warnCount === 1 ? "" : "s"}
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="console-header-right">
@@ -113,21 +184,30 @@ export function Console({
               <ClearIcon />
             </button>
           )}
-          <span className={`console-toggle ${collapsed ? "" : "open"}`}>
+          <span className="console-shortcut">Ctrl J</span>
+          <button
+            className={`console-toggle ${collapsed ? "" : "open"}`}
+            onClick={() => onCollapsedChange(!collapsed)}
+            aria-label={collapsed ? "Expand console" : "Collapse console"}
+            aria-expanded={!collapsed}
+          >
             <ChevronIcon />
-          </span>
+          </button>
         </div>
       </div>
 
       {!collapsed && (
         <div className="console-body" ref={bodyRef}>
-          {entries.length === 0 ? (
+          {visibleEntries.length === 0 ? (
             <div className="console-empty">
               <TerminalEmptyIcon />
-              <p>No output yet</p>
+              <div>
+                <strong>{entries.length === 0 ? "No output yet" : "No matching output"}</strong>
+                <p>{entries.length === 0 ? "Run your project to inspect logs and errors" : "Choose another filter to view entries"}</p>
+              </div>
             </div>
           ) : (
-            entries.map((entry) => (
+            visibleEntries.map((entry) => (
               <div key={entry.id} className={`console-entry ${entry.level}`}>
                 <span className="console-entry-icon">
                   {entry.level === "log" && <LogIcon />}

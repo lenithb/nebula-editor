@@ -7,11 +7,18 @@ type RunStatus = "idle" | "running" | "success" | "error";
 interface HeaderProps {
   code: string;
   onRun: () => void;
-  onClear: () => void;
   runStatus: RunStatus;
+  sidebarOpen: boolean;
+  onToggleSidebar: () => void;
 }
 
-export function Header({ code, onRun, onClear, runStatus }: HeaderProps) {
+export function Header({
+  code,
+  onRun,
+  runStatus,
+  sidebarOpen,
+  onToggleSidebar,
+}: HeaderProps) {
   const [copyState, setCopyState] = useState<"idle" | "copied">("idle");
   const [toastVisible, setToastVisible] = useState(false);
 
@@ -55,59 +62,37 @@ export function Header({ code, onRun, onClear, runStatus }: HeaderProps) {
   return (
     <header className="header">
       <div className="header-brand">
-        <svg
-          className="header-logo"
-          viewBox="0 0 26 26"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+        <button
+          className={`sidebar-toggle ${sidebarOpen ? "active" : ""}`}
+          onClick={onToggleSidebar}
+          aria-label="Toggle explorer"
+          aria-pressed={sidebarOpen}
+          data-tooltip="Toggle explorer"
         >
-          <circle
-            cx="13"
-            cy="13"
-            r="12"
-            stroke="#2a2a2a"
-            strokeWidth="1"
-            fill="#000"
-          />
-          <circle
-            cx="13"
-            cy="13"
-            r="7"
-            stroke="#f5f5f5"
-            strokeWidth="1"
-            fill="none"
-            strokeDasharray="3 2"
-            opacity="0.55"
-          />
-          <circle cx="13" cy="13" r="4" fill="#fff" />
-          <circle cx="13" cy="13" r="1.5" fill="#000" />
-        </svg>
-        <div>
-          <div className="header-title">Nebula JS</div>
-          <div className="header-tagline">Compilador Web</div>
+          <SidebarIcon />
+        </button>
+        <img className="header-logo" src="/nebula.png" alt="" />
+        <div className="header-product">
+          <span className="header-title">Nebula</span>
+          <span className="header-separator">/</span>
+          <span className="header-file">project.js</span>
         </div>
       </div>
 
       <div className="header-center">
-        <div className="status-bar">
+        <div className={`status-bar ${statusDotClass}`}>
           <div className={`status-dot ${statusDotClass}`} />
           <span className="status-text">{statusLabel}</span>
+          <span className="autosave-label">Saved locally</span>
         </div>
       </div>
 
       <div className="header-actions">
         <button
-          className="btn btn-ghost btn-icon"
-          onClick={onClear}
-          aria-label="Clear console"
-        >
-          <TrashIcon />
-        </button>
-
-        <button
           className={`btn btn-ghost btn-icon ${copyState === "copied" ? "btn-copy-flash" : ""}`}
           onClick={handleCopy}
           aria-label="Copy code to clipboard"
+          data-tooltip="Copy code"
         >
           {copyState === "copied" ? <CheckIcon /> : <CopyIcon />}
         </button>
@@ -116,18 +101,12 @@ export function Header({ code, onRun, onClear, runStatus }: HeaderProps) {
           className="btn btn-ghost btn-icon"
           onClick={handleDownload}
           aria-label="Download project"
+          data-tooltip="Download project.js"
         >
           <DownloadIcon />
         </button>
 
-        <div
-          style={{
-            width: 1,
-            height: 18,
-            background: "var(--border)",
-            margin: "0 2px",
-          }}
-        />
+        <div className="header-divider" />
 
         <button
           className={`btn btn-run ${runStatus === "running" ? "running" : ""}`}
@@ -135,8 +114,8 @@ export function Header({ code, onRun, onClear, runStatus }: HeaderProps) {
           aria-label="Run code (Ctrl+Enter)"
         >
           {runStatus === "running" ? <SpinnerIcon /> : <PlayIcon />}
-          <span>Run</span>
-          <span className="kbd">⌃↵</span>
+          <span>{runStatus === "running" ? "Running" : "Run"}</span>
+          <span className="kbd">Ctrl ↵</span>
         </button>
       </div>
 
@@ -231,19 +210,20 @@ function DownloadIcon() {
   );
 }
 
-function TrashIcon() {
+function SidebarIcon() {
   return (
     <svg
-      width="13"
-      height="13"
-      viewBox="0 0 14 14"
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.4"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M2 3.5h10M5.5 3.5V2.5h3v1M5 5.5l.5 5M9 5.5l-.5 5M3.5 3.5l.5 8h6l.5-8" />
+      <rect x="1.5" y="2" width="13" height="12" rx="2" />
+      <path d="M5.5 2v12" />
     </svg>
   );
 }

@@ -1,12 +1,15 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { lazy, Suspense, useState, useCallback, useRef, useEffect } from "react";
 import { Header } from "./components/Header";
-import { Editor } from "./components/Editor";
 import { Preview } from "./components/Preview";
 import { Console } from "./components/Console";
-import { Skeleton } from "./components/Skeleton";
+import { ActivityBar, ProjectSidebar } from "./components/WorkspaceChrome";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useConsole } from "./hooks/useConsole";
 import type { ConsoleLevel } from "./hooks/useConsole";
+
+const Editor = lazy(() =>
+  import("./components/Editor").then((module) => ({ default: module.Editor })),
+);
 
 const DEFAULT_CODE = `console.log("Hello from Nebula JS ✦");
 
@@ -54,10 +57,17 @@ export function App() {
   const [code, setCode] = useLocalStorage("nebula-js:code", DEFAULT_CODE);
   const [runKey, setRunKey] = useState(0);
   const [runStatus, setRunStatus] = useState<RunStatus>("idle");
-  const [editorReady, setEditorReady] = useState(false);
   const [consoleHeight, setConsoleHeight] = useLocalStorage(
     "nebula-js:console-height",
     220,
+  );
+  const [consoleCollapsed, setConsoleCollapsed] = useLocalStorage(
+    "nebula-js:console-collapsed",
+    false,
+  );
+  const [sidebarOpen, setSidebarOpen] = useLocalStorage(
+    "nebula-js:sidebar-open",
+    true,
   );
 
   const [editorWidthPct, setEditorWidthPct] = useLocalStorage(
@@ -142,74 +152,106 @@ export function App() {
     window.addEventListener("mouseup", handleMouseUp);
   }
 
-  return (
-    <>
-      {!editorReady && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 9999 }}>
-          <Skeleton />
-        </div>
-      )}
+  function handleVerticalResizeKeyDown(e: React.KeyboardEvent) {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const direction = e.key === "ArrowLeft" ? -2 : 2;
+    setEditorWidthPct((current) => Math.max(28, Math.min(78, current + direction)));
+  }
 
-      <div
-        className="app"
-        style={{ visibility: editorReady ? "visible" : "hidden" }}
-      >
+  return (
+      <div className="app">
         <Header
           code={code}
           onRun={handleRun}
-          onClear={clearEntries}
           runStatus={runStatus}
+          sidebarOpen={sidebarOpen}
+          onToggleSidebar={() => setSidebarOpen((open) => !open)}
         />
 
-        <div className="workspace">
-          <div className="workspace-panels" ref={workspaceRef}>
-            <div
-              style={{
-                width: `${editorWidthPct}%`,
-                display: "flex",
-                overflow: "hidden",
-                minWidth: 0,
-              }}
-            >
-              <Editor
-                code={code}
-                onChange={setCode}
-                onRun={handleRun}
-                onMount={() => setEditorReady(true)}
-              />
-            </div>
-
-            <div
-              className="resize-handle-vertical"
-              onMouseDown={handleVerticalResizeMouseDown}
-            />
-
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                overflow: "hidden",
-                minWidth: 0,
-              }}
-            >
-              <Preview
-                code={code}
-                runKey={runKey}
-                onConsoleMessage={handleConsoleMessage}
-              />
-            </div>
-          </div>
-
-          <Console
-            entries={entries}
-            onClear={clearEntries}
-            errorCount={errorCount}
-            warnCount={warnCount}
-            height={consoleHeight}
-            onHeightChange={setConsoleHeight}
+        <div className="workbench">
+          <ActivityBar
+            sidebarOpen={sidebarOpen}
+            consoleOpen={!consoleCollapsed}
+            onToggleSidebar={() => setSidebarOpen((open) => !open)}
+            onToggleConsole={() => setConsoleCollapsed((collapsed) => !collapsed)}
+            onRun={handleRun}
           />
+          <ProjectSidebar
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+
+          <main className="workspace">
+            <div className="workspace-panels" ref={workspaceRef}>
+              <div
+                className="editor-pane"
+                style={{ width: `${editorWidthPct}%` }}
+              >
+                <Suspense fallback={<EditorShellLoading />}>
+                  <Editor
+                    code={code}
+                    onChange={setCode}
+                    onRun={handleRun}
+                  />
+                </Suspense>
+              </div>
+
+              <div
+                className="resize-handle-vertical"
+                onMouseDown={handleVerticalResizeMouseDown}
+                onKeyDown={handleVerticalResizeKeyDown}
+                role="separator"
+                aria-label="Resize editor and preview"
+                aria-orientation="vertical"
+                aria-valuemin={28}
+                aria-valuemax={78}
+                aria-valuenow={Math.round(editorWidthPct)}
+                tabIndex={0}
+              />
+
+              <div className="preview-pane">
+                <Preview
+                  code={code}
+                  runKey={runKey}
+                  onRun={handleRun}
+                  onConsoleMessage={handleConsoleMessage}
+                />
+              </div>
+            </div>
+
+            <Console
+              entries={entries}
+              onClear={clearEntries}
+              errorCount={errorCount}
+              warnCount={warnCount}
+              height={consoleHeight}
+              onHeightChange={setConsoleHeight}
+              collapsed={consoleCollapsed}
+              onCollapsedChange={setConsoleCollapsed}
+            />
+          </main>
         </div>
       </div>
-    </>
+  );
+}
+
+function EditorShellLoading() {
+  return (
+    <div className="panel editor-panel">
+      <div className="editor-tabs">
+        <div className="editor-tab active">
+          <span className="file-type-icon">JS</span>
+          <span>project.js</span>
+        </div>
+      </div>
+      <div className="editor-loading" aria-live="polite">
+        <span className="editor-loading-spinner" />
+        <div>
+          <strong>Loading editor</strong>
+          <span>Preparing JavaScript intelligence…</span>
+        </div>
+      </div>
+    </div>
   );
 }
