@@ -14,14 +14,8 @@ const Editor = lazy(() =>
 const DEFAULT_CODE = `console.log("Hello from Nebula JS ✦");
 
 document.body.innerHTML = \`
-<div style="font-family:'Poppins',system-ui,sans-serif;padding:3rem;max-width:640px;background:#000;min-height:100vh;color:#fafafa">
+<div style="font-family:system-ui,-apple-system,sans-serif;padding:clamp(1.5rem,5vw,3rem);width:100%;background:#000;min-height:100vh;color:#fafafa">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:2.5rem">
-    <svg width="28" height="28" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="13" cy="13" r="12" stroke="#2a2a2a" stroke-width="1" fill="#000"/>
-      <circle cx="13" cy="13" r="7" stroke="#f5f5f5" stroke-width="1" fill="none" stroke-dasharray="3 2" opacity="0.55"/>
-      <circle cx="13" cy="13" r="4" fill="#fff"/>
-      <circle cx="13" cy="13" r="1.5" fill="#000"/>
-    </svg>
     <div>
       <h1 style="margin:0;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:#fafafa">Nebula JS</h1>
       <p style="margin:0;font-size:11px;color:#52525b;font-weight:400">Write. Run. Explore.</p>
@@ -45,12 +39,33 @@ console.warn("This is a warning example");
 
 type RunStatus = "idle" | "running" | "success" | "error";
 
-const STORAGE_VERSION = "v2";
-(function clearStaleStorage() {
-  if (localStorage.getItem("nebula-js:version") !== STORAGE_VERSION) {
+const STORAGE_VERSION = "v3";
+(function migrateStoredCode() {
+  const storedVersion = localStorage.getItem("nebula-js:version");
+  if (storedVersion === STORAGE_VERSION) return;
+
+  if (storedVersion === "v2") {
+    try {
+      const storedCode = localStorage.getItem("nebula-js:code");
+      if (storedCode) {
+        const parsedCode = JSON.parse(storedCode);
+        if (typeof parsedCode === "string") {
+          const migratedCode = parsedCode
+            .replace(/\s*<svg width="28"[\s\S]*?<\/svg>\s*/, "\n    ")
+            .replace(
+              "font-family:'Poppins',system-ui,sans-serif;padding:3rem;max-width:640px;background:#000;min-height:100vh;color:#fafafa",
+              "font-family:system-ui,-apple-system,sans-serif;padding:clamp(1.5rem,5vw,3rem);width:100%;background:#000;min-height:100vh;color:#fafafa",
+            );
+          localStorage.setItem("nebula-js:code", JSON.stringify(migratedCode));
+        }
+      }
+    } catch {
+      localStorage.removeItem("nebula-js:code");
+    }
+  } else {
     localStorage.removeItem("nebula-js:code");
-    localStorage.setItem("nebula-js:version", STORAGE_VERSION);
   }
+  localStorage.setItem("nebula-js:version", STORAGE_VERSION);
 })();
 
 export function App() {

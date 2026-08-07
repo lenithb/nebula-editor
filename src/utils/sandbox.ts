@@ -6,8 +6,10 @@ export function buildSandboxHTML(code: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     *, *::before, *::after { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; }
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: system-ui, -apple-system, sans-serif;
       font-size: 14px;
       line-height: 1.6;

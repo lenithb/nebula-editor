@@ -1,7 +1,29 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import MonacoEditor, { OnMount } from "@monaco-editor/react";
 import type * as Monaco from "monaco-editor";
 import "../monaco";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+
+const EDITOR_FONTS = [
+  {
+    id: "jetbrains",
+    label: "JetBrains Mono",
+    family: "'JetBrains Mono', monospace",
+  },
+  { id: "fira", label: "Fira Code", family: "'Fira Code', monospace" },
+  {
+    id: "ibm",
+    label: "IBM Plex Mono",
+    family: "'IBM Plex Mono', monospace",
+  },
+  {
+    id: "system",
+    label: "System Mono",
+    family: "ui-monospace, 'SFMono-Regular', Consolas, monospace",
+  },
+] as const;
+
+type EditorFontId = (typeof EDITOR_FONTS)[number]["id"];
 
 interface EditorProps {
   code: string;
@@ -11,7 +33,42 @@ interface EditorProps {
 
 export function Editor({ code, onChange, onRun }: EditorProps) {
   const editorRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
   const [cursor, setCursor] = useState({ line: 1, column: 1 });
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [fontId, setFontId] = useLocalStorage<EditorFontId>(
+    "nebula-js:editor-font",
+    "jetbrains",
+  );
+  const [fontSize, setFontSize] = useLocalStorage(
+    "nebula-js:editor-font-size",
+    13.5,
+  );
+  const selectedFont =
+    EDITOR_FONTS.find((font) => font.id === fontId) ?? EDITOR_FONTS[0];
+  const safeFontSize = Number.isFinite(fontSize)
+    ? Math.max(12, Math.min(20, fontSize))
+    : 13.5;
+
+  useEffect(() => {
+    if (!settingsOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!settingsRef.current?.contains(event.target as Node)) {
+        setSettingsOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSettingsOpen(false);
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [settingsOpen]);
 
   const handleMount: OnMount = useCallback(
     (editor, monaco) => {
@@ -55,34 +112,34 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
           { token: "attribute.value", foreground: "F5A97F" },
         ],
         colors: {
-          "editor.background": "#101114",
+          "editor.background": "#050506",
           "editor.foreground": "#CAD0DC",
-          "editor.lineHighlightBackground": "#17191E",
-          "editor.selectionBackground": "#3B4261AA",
-          "editor.inactiveSelectionBackground": "#30344988",
-          "editorLineNumber.foreground": "#4F5561",
-          "editorLineNumber.activeForeground": "#AAB2C0",
-          "editorCursor.foreground": "#B7BDF8",
-          "editorWhitespace.foreground": "#282B32",
-          "editorIndentGuide.background1": "#23262C",
-          "editorIndentGuide.activeBackground1": "#454A55",
-          "editor.findMatchBackground": "#8AADF444",
-          "editor.findMatchHighlightBackground": "#8AADF425",
-          "editorSuggestWidget.background": "#181A1F",
-          "editorSuggestWidget.border": "#2A2D35",
-          "editorSuggestWidget.selectedBackground": "#292D3E",
+          "editor.lineHighlightBackground": "#0E0E10",
+          "editor.selectionBackground": "#3A3A3FAA",
+          "editor.inactiveSelectionBackground": "#28282C88",
+          "editorLineNumber.foreground": "#444448",
+          "editorLineNumber.activeForeground": "#B8B8BB",
+          "editorCursor.foreground": "#F4F4F5",
+          "editorWhitespace.foreground": "#1D1D20",
+          "editorIndentGuide.background1": "#1A1A1D",
+          "editorIndentGuide.activeBackground1": "#3D3D42",
+          "editor.findMatchBackground": "#FFFFFF32",
+          "editor.findMatchHighlightBackground": "#FFFFFF1C",
+          "editorSuggestWidget.background": "#111112",
+          "editorSuggestWidget.border": "#29292C",
+          "editorSuggestWidget.selectedBackground": "#242427",
           "editorSuggestWidget.foreground": "#CAD0DC",
-          "editorHoverWidget.background": "#181A1F",
-          "editorHoverWidget.border": "#2A2D35",
-          "scrollbarSlider.background": "#3B3E4666",
-          "scrollbarSlider.hoverBackground": "#51566188",
-          "scrollbarSlider.activeBackground": "#676D7AAA",
-          "editorGutter.background": "#101114",
-          "editorBracketMatch.background": "#8AADF422",
-          "editorBracketMatch.border": "#8AADF488",
-          "editorOverviewRuler.border": "#101114",
-          "editorWidget.background": "#181A1F",
-          "editorWidget.border": "#2A2D35",
+          "editorHoverWidget.background": "#111112",
+          "editorHoverWidget.border": "#29292C",
+          "scrollbarSlider.background": "#33333666",
+          "scrollbarSlider.hoverBackground": "#4A4A4E88",
+          "scrollbarSlider.activeBackground": "#606065AA",
+          "editorGutter.background": "#050506",
+          "editorBracketMatch.background": "#FFFFFF18",
+          "editorBracketMatch.border": "#FFFFFF66",
+          "editorOverviewRuler.border": "#050506",
+          "editorWidget.background": "#111112",
+          "editorWidget.border": "#29292C",
         },
       });
 
@@ -119,9 +176,75 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
           <span className="tab-saved" data-tooltip="Saved locally" />
         </div>
         <div className="editor-tab-spacer" />
-        <div className="editor-context">
-          <span className="context-dot" />
-          Auto-save
+        <div className="editor-toolbar" ref={settingsRef}>
+          <div className="editor-context">
+            <span className="context-dot" />
+            Auto-save
+          </div>
+          <button
+            className={`editor-settings-button ${settingsOpen ? "active" : ""}`}
+            onClick={() => setSettingsOpen((open) => !open)}
+            aria-label="Editor typography settings"
+            aria-expanded={settingsOpen}
+            data-tooltip="Editor typography"
+          >
+            <TypographyIcon />
+          </button>
+
+          {settingsOpen && (
+            <div className="editor-settings-popover" role="dialog" aria-label="Editor typography">
+              <div className="settings-popover-header">
+                <div>
+                  <strong>Editor typography</strong>
+                  <span>Personalize your coding surface</span>
+                </div>
+                <button
+                  onClick={() => {
+                    setFontId("jetbrains");
+                    setFontSize(13.5);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+
+              <label className="editor-setting-field">
+                <span>Font family</span>
+                <select
+                  value={selectedFont.id}
+                  onChange={(event) => setFontId(event.target.value as EditorFontId)}
+                >
+                  {EDITOR_FONTS.map((font) => (
+                    <option key={font.id} value={font.id}>
+                      {font.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="editor-setting-field">
+                <span className="font-size-label">
+                  Font size
+                  <output>{safeFontSize}px</output>
+                </span>
+                <input
+                  type="range"
+                  min="12"
+                  max="20"
+                  step="0.5"
+                  value={safeFontSize}
+                  onChange={(event) => setFontSize(Number(event.target.value))}
+                />
+              </label>
+
+              <div
+                className="font-preview"
+                style={{ fontFamily: selectedFont.family, fontSize: safeFontSize }}
+              >
+                const nebula = "ready";
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -135,10 +258,10 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
           onMount={handleMount}
           loading={<EditorLoading />}
           options={{
-            fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-            fontSize: 13.5,
+            fontFamily: selectedFont.family,
+            fontSize: safeFontSize,
             fontLigatures: true,
-            lineHeight: 23,
+            lineHeight: Math.round(safeFontSize * 1.7),
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             renderLineHighlight: "line",
@@ -211,5 +334,14 @@ function EditorLoading() {
         <span>Preparing JavaScript intelligence…</span>
       </div>
     </div>
+  );
+}
+
+function TypographyIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3">
+      <path d="M2.5 4V2.5h7V4M6 2.5v9M4.25 11.5h3.5" />
+      <path d="M10 7.5h3.5M11.75 5.75v3.5M10.25 12.5h3" opacity=".72" />
+    </svg>
   );
 }
