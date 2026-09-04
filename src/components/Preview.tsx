@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { buildSandboxHTML } from "../utils/sandbox";
 import type { ConsoleLevel } from "../hooks/useConsole";
+import { t } from "../i18n";
 
 interface PreviewProps {
   code: string;
@@ -61,35 +62,35 @@ export function Preview({
           <span className="panel-title-icon">
             <PreviewIcon />
           </span>
-          <span>Preview</span>
+          <span>{t.preview}</span>
           <span className="preview-address">sandbox://project</span>
         </div>
         <div className="panel-actions">
-          <div className="viewport-switcher" aria-label="Preview viewport">
+          <div className="viewport-switcher" aria-label={t.previewViewport}>
             <button
               className={viewport === "desktop" ? "active" : ""}
               onClick={() => setViewport("desktop")}
-              aria-label="Desktop viewport"
+              aria-label={t.desktopVp}
               aria-pressed={viewport === "desktop"}
-              data-tooltip="Desktop"
+              data-tooltip={t.desktop}
             >
               <DesktopIcon />
             </button>
             <button
               className={viewport === "tablet" ? "active" : ""}
               onClick={() => setViewport("tablet")}
-              aria-label="Tablet viewport"
+              aria-label={t.tabletVp}
               aria-pressed={viewport === "tablet"}
-              data-tooltip="Tablet"
+              data-tooltip={t.tablet}
             >
               <TabletIcon />
             </button>
             <button
               className={viewport === "mobile" ? "active" : ""}
               onClick={() => setViewport("mobile")}
-              aria-label="Mobile viewport"
+              aria-label={t.mobileVp}
               aria-pressed={viewport === "mobile"}
-              data-tooltip="Mobile"
+              data-tooltip={t.mobile}
             >
               <MobileIcon />
             </button>
@@ -97,22 +98,22 @@ export function Preview({
           <button
             className="panel-action-button"
             onClick={onRun}
-            aria-label="Refresh preview"
-            data-tooltip="Refresh preview"
+            aria-label={t.refreshPreview}
+            data-tooltip={t.refreshPreview}
           >
             <RefreshIcon />
           </button>
           {hasRun && (
             <span className="live-badge">
               <span className="live-dot" />
-              live
+              {t.live}
             </span>
           )}
           <button
             className="panel-action-button"
             onClick={onClose}
-            aria-label="Close preview"
-            data-tooltip="Close preview"
+            aria-label={t.closePreview}
+            data-tooltip={t.closePreview}
           >
             <CloseIcon />
           </button>
@@ -126,12 +127,12 @@ export function Preview({
               <EmptyPreviewIcon />
             </div>
             <div>
-              <strong>Preview is ready</strong>
-              <p>Run your code to render the sandbox</p>
+              <strong>{t.previewReady}</strong>
+              <p>{t.previewReadyHint}</p>
             </div>
             <button className="preview-run-button" onClick={onRun}>
               <PlayIcon />
-              Run project
+              {t.runProject}
             </button>
           </div>
         )}
@@ -142,7 +143,7 @@ export function Preview({
                 ref={iframeRef}
                 className="preview-iframe"
                 sandbox="allow-scripts"
-                title="Code Preview"
+                title={t.codePreview}
               />
             </div>
           </div>

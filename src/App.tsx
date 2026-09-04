@@ -7,36 +7,39 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useConsole } from "./hooks/useConsole";
 import type { ConsoleLevel } from "./hooks/useConsole";
 import { JavaScriptIcon } from "./components/JavaScriptIcon";
+import { lang, t } from "./i18n";
 
 const Editor = lazy(() =>
   import("./components/Editor").then((module) => ({ default: module.Editor })),
 );
 
-const DEFAULT_CODE = `console.log("Hello from Nebula JS ✦");
+const buildDefaultCode = (es: boolean) => `console.log("${es ? "Hola desde Nebula JS ✦" : "Hello from Nebula JS ✦"}");
 
 document.body.innerHTML = \`
 <div style="font-family:system-ui,-apple-system,sans-serif;padding:clamp(1.5rem,5vw,3rem);width:100%;background:#000;min-height:100vh;color:#fafafa">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:2.5rem">
     <div>
       <h1 style="margin:0;font-size:18px;font-weight:600;letter-spacing:-0.02em;color:#fafafa">Nebula JS</h1>
-      <p style="margin:0;font-size:11px;color:#52525b;font-weight:400">Write. Run. Explore.</p>
+      <p style="margin:0;font-size:11px;color:#52525b;font-weight:400">${es ? "Escribe. Ejecuta. Explora." : "Write. Run. Explore."}</p>
     </div>
   </div>
   <div style="background:#0a0a0a;border:1px solid #242424;border-radius:8px;padding:1.25rem;margin-bottom:1rem">
-    <p style="margin:0 0 6px;font-size:10px;color:#f5f5f5;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Status</p>
-    <p style="margin:0;font-size:14px;color:#fafafa;font-weight:500">Your code is running successfully.</p>
+    <p style="margin:0 0 6px;font-size:10px;color:#f5f5f5;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">${es ? "Estado" : "Status"}</p>
+    <p style="margin:0;font-size:14px;color:#fafafa;font-weight:500">${es ? "Tu código se está ejecutando correctamente." : "Your code is running successfully."}</p>
   </div>
   <p style="font-size:12px;color:#52525b;margin:0;line-height:1.7">
-    Edit the code in the editor and press
+    ${es ? "Edita el código en el editor y pulsa" : "Edit the code in the editor and press"}
     <kbd style="background:#0a0a0a;border:1px solid #242424;border-radius:4px;padding:2px 6px;font-size:10px;font-family:'JetBrains Mono',monospace;color:#f5f5f5">Ctrl+Enter</kbd>
-    to run it.
+    ${es ? "para ejecutarlo." : "to run it."}
   </p>
 </div>
 \`;
 
-console.log("DOM updated successfully ✓");
-console.warn("This is a warning example");
+console.log("${es ? "DOM actualizado correctamente ✓" : "DOM updated successfully ✓"}");
+console.warn("${es ? "Este es un ejemplo de advertencia" : "This is a warning example"}");
 `;
+
+const DEFAULT_CODE = buildDefaultCode(lang === "es");
 
 type RunStatus = "idle" | "running" | "success" | "error";
 
@@ -230,7 +233,7 @@ export function App() {
                     onMouseDown={handleVerticalResizeMouseDown}
                     onKeyDown={handleVerticalResizeKeyDown}
                     role="separator"
-                    aria-label="Resize editor and preview"
+                    aria-label={t.resizePanels}
                     aria-orientation="vertical"
                     aria-valuemin={28}
                     aria-valuemax={78}
@@ -279,8 +282,8 @@ function EditorShellLoading() {
       <div className="editor-loading" aria-live="polite">
         <span className="editor-loading-spinner" />
         <div>
-          <strong>Loading editor</strong>
-          <span>Preparing JavaScript intelligence…</span>
+          <strong>{t.loadingEditor}</strong>
+          <span>{t.preparing}</span>
         </div>
       </div>
     </div>

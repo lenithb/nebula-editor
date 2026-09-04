@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { downloadFile } from "../utils/download";
 import nebulaLogo from "../assets/logos/nebula.png";
+import { t } from "../i18n";
 
 type RunStatus = "idle" | "running" | "success" | "error";
 
@@ -44,12 +45,12 @@ export function Header({
 
   const statusLabel =
     runStatus === "running"
-      ? "Running"
+      ? t.status.running
       : runStatus === "success"
-        ? "Executed"
+        ? t.status.executed
         : runStatus === "error"
-          ? "Error"
-          : "Ready";
+          ? t.status.error
+          : t.status.ready;
 
   const statusDotClass =
     runStatus === "running"
@@ -66,9 +67,9 @@ export function Header({
         <button
           className={`sidebar-toggle ${sidebarOpen ? "active" : ""}`}
           onClick={onToggleSidebar}
-          aria-label="Toggle explorer"
+          aria-label={t.toggleExplorer}
           aria-pressed={sidebarOpen}
-          data-tooltip="Toggle explorer"
+          data-tooltip={t.toggleExplorer}
         >
           <SidebarIcon />
         </button>
@@ -84,7 +85,7 @@ export function Header({
         <div className={`status-bar ${statusDotClass}`}>
           <div className={`status-dot ${statusDotClass}`} />
           <span className="status-text">{statusLabel}</span>
-          <span className="autosave-label">Saved locally</span>
+          <span className="autosave-label">{t.savedLocally}</span>
         </div>
       </div>
 
@@ -92,8 +93,8 @@ export function Header({
         <button
           className={`btn btn-ghost btn-icon ${copyState === "copied" ? "btn-copy-flash" : ""}`}
           onClick={handleCopy}
-          aria-label="Copy code to clipboard"
-          data-tooltip="Copy code"
+          aria-label={t.copyCodeAria}
+          data-tooltip={t.copyCode}
         >
           {copyState === "copied" ? <CheckIcon /> : <CopyIcon />}
         </button>
@@ -101,8 +102,8 @@ export function Header({
         <button
           className="btn btn-ghost btn-icon"
           onClick={handleDownload}
-          aria-label="Download project"
-          data-tooltip="Download project.js"
+          aria-label={t.downloadProject}
+          data-tooltip={t.downloadProjectJs}
         >
           <DownloadIcon />
         </button>
@@ -112,10 +113,10 @@ export function Header({
         <button
           className={`btn btn-run ${runStatus === "running" ? "running" : ""}`}
           onClick={onRun}
-          aria-label="Run code (Ctrl+Enter)"
+          aria-label={t.runCodeAria}
         >
           {runStatus === "running" ? <SpinnerIcon /> : <PlayIcon />}
-          <span>{runStatus === "running" ? "Running" : "Run"}</span>
+          <span>{runStatus === "running" ? t.status.running : t.run}</span>
           <span className="kbd">Ctrl ↵</span>
         </button>
       </div>
@@ -124,7 +125,7 @@ export function Header({
         createPortal(
           <div className="toast-success" aria-live="polite">
             <CheckIcon />
-            <span>Código copiado al portapapeles</span>
+            <span>{t.copied}</span>
           </div>,
           document.body,
         )}

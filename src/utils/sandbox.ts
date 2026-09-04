@@ -1,6 +1,8 @@
+import { lang } from "../i18n";
+
 export function buildSandboxHTML(code: string): string {
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,7 +57,7 @@ export function buildSandboxHTML(code: string): string {
   });
 
   window.addEventListener('unhandledrejection', function(e) {
-    send('error', ['Unhandled Promise Rejection: ' + (e.reason ? (e.reason.message || e.reason) : 'Unknown')]);
+    send('error', ['${lang === "es" ? "Promesa rechazada sin manejar: " : "Unhandled Promise Rejection: "}' + (e.reason ? (e.reason.message || e.reason) : '${lang === "es" ? "Desconocido" : "Unknown"}')]);
   });
 })();
 

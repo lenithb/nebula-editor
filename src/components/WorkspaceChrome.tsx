@@ -1,4 +1,5 @@
 import { JavaScriptIcon } from "./JavaScriptIcon";
+import { t } from "../i18n";
 
 interface ActivityBarProps {
   sidebarOpen: boolean;
@@ -20,40 +21,40 @@ export function ActivityBar({
   onRun,
 }: ActivityBarProps) {
   return (
-    <nav className="activity-bar" aria-label="Workspace tools">
+    <nav className="activity-bar" aria-label={t.workspaceTools}>
       <div className="activity-bar-group">
         <button
           className={`activity-button ${sidebarOpen ? "active" : ""}`}
           onClick={onToggleSidebar}
-          aria-label="Toggle explorer"
+          aria-label={t.toggleExplorer}
           aria-pressed={sidebarOpen}
-          data-tooltip="Explorer"
+          data-tooltip={t.explorer}
         >
           <FilesIcon />
         </button>
         <button
           className="activity-button"
           onClick={onRun}
-          aria-label="Run project"
-          data-tooltip="Run project"
+          aria-label={t.runProject}
+          data-tooltip={t.runProject}
         >
           <RunIcon />
         </button>
         <button
           className={`activity-button ${previewOpen ? "active" : ""}`}
           onClick={onTogglePreview}
-          aria-label="Toggle preview"
+          aria-label={t.togglePreview}
           aria-pressed={previewOpen}
-          data-tooltip="Preview"
+          data-tooltip={t.preview}
         >
           <PreviewIcon />
         </button>
         <button
           className={`activity-button ${consoleOpen ? "active" : ""}`}
           onClick={onToggleConsole}
-          aria-label="Toggle console"
+          aria-label={t.toggleConsole}
           aria-pressed={consoleOpen}
-          data-tooltip="Console"
+          data-tooltip={t.console}
         >
           <TerminalIcon />
         </button>
@@ -73,14 +74,14 @@ export function ProjectSidebar({ open, onClose }: ProjectSidebarProps) {
   if (!open) return null;
 
   return (
-    <aside className="project-sidebar" aria-label="Project explorer">
+    <aside className="project-sidebar" aria-label={t.projectExplorer}>
       <div className="sidebar-header">
-        <span>Explorer</span>
+        <span>{t.explorer}</span>
         <button
           className="sidebar-close"
           onClick={onClose}
-          aria-label="Close explorer"
-          data-tooltip="Close explorer"
+          aria-label={t.closeExplorer}
+          data-tooltip={t.closeExplorer}
         >
           <CloseIcon />
         </button>
@@ -89,20 +90,20 @@ export function ProjectSidebar({ open, onClose }: ProjectSidebarProps) {
       <div className="project-tree">
         <div className="project-root">
           <ChevronIcon />
-          <span>Nebula workspace</span>
+          <span>{t.nebulaWorkspace}</span>
         </div>
         <button className="project-file active" aria-current="page">
           <JavaScriptIcon className="file-type-icon" />
           <span>project.js</span>
-          <span className="file-saved-dot" aria-label="Saved locally" />
+          <span className="file-saved-dot" aria-label={t.savedLocally} />
         </button>
       </div>
 
       <div className="sidebar-footer">
         <span className="storage-status-dot" />
         <div>
-          <strong>Local workspace</strong>
-          <span>Changes are saved automatically</span>
+          <strong>{t.localWorkspace}</strong>
+          <span>{t.autosavedChanges}</span>
         </div>
       </div>
     </aside>

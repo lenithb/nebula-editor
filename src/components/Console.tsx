@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import type { ConsoleEntry } from "../hooks/useConsole";
+import { lang, t } from "../i18n";
 
 interface ConsoleProps {
   entries: ConsoleEntry[];
@@ -91,7 +92,7 @@ export function Console({
       : "";
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
+    return date.toLocaleTimeString(lang === "es" ? "es-ES" : "en-US", {
       hour12: false,
       hour: "2-digit",
       minute: "2-digit",
@@ -117,7 +118,7 @@ export function Console({
         onMouseDown={handleResizeMouseDown}
         onKeyDown={handleResizeKeyDown}
         role="separator"
-        aria-label="Resize console"
+        aria-label={t.resizeConsole}
         aria-orientation="horizontal"
         aria-valuemin={120}
         aria-valuemax={520}
@@ -136,25 +137,25 @@ export function Console({
             <span className="console-title-icon">
               <TerminalIcon />
             </span>
-            Console
+            {t.console}
           </button>
           <span className={`console-count ${countClass}`}>
             {entries.length}
           </span>
           {!collapsed && entries.length > 0 && (
-            <div className="console-filters" aria-label="Filter console output">
+            <div className="console-filters" aria-label={t.filterConsole}>
               <button
                 className={filter === "all" ? "active" : ""}
                 onClick={() => setFilter("all")}
               >
-                All
+                {t.all}
               </button>
               {errorCount > 0 && (
                 <button
                   className={`error ${filter === "error" ? "active" : ""}`}
                   onClick={() => setFilter("error")}
                 >
-                  {errorCount} error{errorCount === 1 ? "" : "s"}
+                  {t.errors(errorCount)}
                 </button>
               )}
               {warnCount > 0 && (
@@ -162,7 +163,7 @@ export function Console({
                   className={`warn ${filter === "warn" ? "active" : ""}`}
                   onClick={() => setFilter("warn")}
                 >
-                  {warnCount} warning{warnCount === 1 ? "" : "s"}
+                  {t.warnings(warnCount)}
                 </button>
               )}
             </div>
@@ -178,8 +179,8 @@ export function Console({
                 e.stopPropagation();
                 onClear();
               }}
-              data-tooltip="Clear"
-              aria-label="Clear console"
+              data-tooltip={t.clear}
+              aria-label={t.clearConsole}
             >
               <ClearIcon />
             </button>
@@ -188,7 +189,7 @@ export function Console({
           <button
             className={`console-toggle ${collapsed ? "" : "open"}`}
             onClick={() => onCollapsedChange(!collapsed)}
-            aria-label={collapsed ? "Expand console" : "Collapse console"}
+            aria-label={collapsed ? t.expandConsole : t.collapseConsole}
             aria-expanded={!collapsed}
           >
             <ChevronIcon />
@@ -202,8 +203,8 @@ export function Console({
             <div className="console-empty">
               <TerminalEmptyIcon />
               <div>
-                <strong>{entries.length === 0 ? "No output yet" : "No matching output"}</strong>
-                <p>{entries.length === 0 ? "Run your project to inspect logs and errors" : "Choose another filter to view entries"}</p>
+                <strong>{entries.length === 0 ? t.noOutput : t.noMatching}</strong>
+                <p>{entries.length === 0 ? t.noOutputHint : t.noMatchingHint}</p>
               </div>
             </div>
           ) : (

@@ -4,6 +4,7 @@ import type * as Monaco from "monaco-editor";
 import "../monaco";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { JavaScriptIcon } from "./JavaScriptIcon";
+import { t } from "../i18n";
 
 const EDITOR_FONTS = [
   {
@@ -195,51 +196,43 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
 
   return (
     <div className="panel editor-panel" style={{ width: "100%", flex: 1 }}>
-      <div className="editor-tabs" role="tablist" aria-label="Open files">
+      <div className="editor-tabs" role="tablist" aria-label={t.openFiles}>
         <div className="editor-tab active" role="tab" aria-selected="true">
           <JavaScriptIcon className="file-type-icon" />
           <span>project.js</span>
-          <span className="tab-saved" data-tooltip="Saved locally" />
+          <span className="tab-saved" data-tooltip={t.savedLocally} />
         </div>
         <div className="editor-tab-spacer" />
         <div className="editor-toolbar" ref={settingsRef}>
           <div className="editor-context">
             <span className="context-dot" />
-            Auto-save
+            {t.autoSave}
           </div>
           <button
             className={`editor-settings-button ${showNebulaBackground ? "active" : ""}`}
             onClick={() => setShowNebulaBackground((visible) => !visible)}
-            aria-label={
-              showNebulaBackground
-                ? "Hide Nebula editor background"
-                : "Show Nebula editor background"
-            }
+            aria-label={showNebulaBackground ? t.hideBg : t.showBg}
             aria-pressed={showNebulaBackground}
-            data-tooltip={
-              showNebulaBackground
-                ? "Hide Nebula background"
-                : "Show Nebula background"
-            }
+            data-tooltip={showNebulaBackground ? t.hideBgTip : t.showBgTip}
           >
             <ImageIcon />
           </button>
           <button
             className={`editor-settings-button ${settingsOpen ? "active" : ""}`}
             onClick={() => setSettingsOpen((open) => !open)}
-            aria-label="Editor typography settings"
+            aria-label={t.typography}
             aria-expanded={settingsOpen}
-            data-tooltip="Editor typography"
+            data-tooltip={t.typography}
           >
             <TypographyIcon />
           </button>
 
           {settingsOpen && (
-            <div className="editor-settings-popover" role="dialog" aria-label="Editor typography">
+            <div className="editor-settings-popover" role="dialog" aria-label={t.typography}>
               <div className="settings-popover-header">
                 <div>
-                  <strong>Editor typography</strong>
-                  <span>Personalize your coding surface</span>
+                  <strong>{t.typography}</strong>
+                  <span>{t.typographyHint}</span>
                 </div>
                 <button
                   onClick={() => {
@@ -247,12 +240,12 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
                     setFontSize(13.5);
                   }}
                 >
-                  Reset
+                  {t.reset}
                 </button>
               </div>
 
               <label className="editor-setting-field">
-                <span>Font family</span>
+                <span>{t.fontFamily}</span>
                 <select
                   value={selectedFont.id}
                   onChange={(event) => setFontId(event.target.value as EditorFontId)}
@@ -267,7 +260,7 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
 
               <label className="editor-setting-field">
                 <span className="font-size-label">
-                  Font size
+                  {t.fontSize}
                   <output>{safeFontSize}px</output>
                 </span>
                 <input
@@ -355,14 +348,14 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
         />
       </div>
 
-      <div className="editor-statusbar" aria-label="Editor status">
+      <div className="editor-statusbar" aria-label={t.editorStatus}>
         <div className="editor-status-left">
           <span className="status-branch-dot" />
-          <span>Local</span>
+          <span>{t.local}</span>
         </div>
         <div className="editor-status-right">
-          <span>Ln {cursor.line}, Col {cursor.column}</span>
-          <span>Spaces: 2</span>
+          <span>{t.lnCol(cursor.line, cursor.column)}</span>
+          <span>{t.spaces}</span>
           <span>UTF-8</span>
           <span>JavaScript</span>
         </div>
@@ -376,8 +369,8 @@ function EditorLoading() {
     <div className="editor-loading" aria-live="polite">
       <span className="editor-loading-spinner" />
       <div>
-        <strong>Loading editor</strong>
-        <span>Preparing JavaScript intelligence…</span>
+        <strong>{t.loadingEditor}</strong>
+        <span>{t.preparing}</span>
       </div>
     </div>
   );
