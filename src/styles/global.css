@@ -27,8 +27,8 @@
 
   --text-primary: #f4f4f5;
   --text-secondary: #b8b8bb;
-  --text-tertiary: #9a9aa0;
-  --text-muted: #86868c;
+  --text-tertiary: #7d7d82;
+  --text-muted: #505055;
 
   --accent: #f4f4f5;
   --accent-bright: #fff;
@@ -36,7 +36,6 @@
   --accent-soft: rgba(255, 255, 255, 0.075);
   --accent-hover: rgba(255, 255, 255, 0.12);
   --accent-border: rgba(255, 255, 255, 0.25);
-  --focus-ring: #d4d4d8;
 
   --success: #8bd5a4;
   --warning: #eed49f;
@@ -131,7 +130,6 @@ button {
   flex-direction: column;
   width: 100%;
   height: 100vh;
-  height: 100dvh;
   min-width: 0;
   overflow: hidden;
   background:
@@ -350,10 +348,9 @@ button {
 .console-filter:focus-visible,
 .console-toggle:focus-visible,
 .sidebar-close:focus-visible,
-.editor-settings-button:focus-visible,
-.project-file:focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
+.editor-settings-button:focus-visible {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 1px;
 }
 
 .btn-icon {
@@ -933,7 +930,7 @@ button {
 }
 
 .editor-setting-field select:focus-visible {
-  border-color: var(--focus-ring);
+  border-color: var(--accent-border);
   box-shadow: 0 0 0 2px var(--accent-soft);
 }
 
