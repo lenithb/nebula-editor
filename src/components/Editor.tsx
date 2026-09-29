@@ -222,7 +222,7 @@ export function Editor({ code, onChange, onRun }: EditorProps) {
             onClick={() => setSettingsOpen((open) => !open)}
             aria-label={t.typography}
             aria-expanded={settingsOpen}
-            data-tooltip={t.typography}
+            data-tooltip={t.typographyTip}
           >
             <TypographyIcon />
           </button>
