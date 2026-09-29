@@ -1,10 +1,34 @@
 import { lang } from "../i18n";
 
+// politica del documento del sandbox: permite cdn y fetch por https, pero
+// bloquea formularios, iframes, objetos y <base>
+const SANDBOX_CSP = [
+  "default-src 'none'",
+  "script-src 'unsafe-inline' 'unsafe-eval' https:",
+  "style-src 'unsafe-inline' https:",
+  "img-src data: blob: https:",
+  "font-src data: https:",
+  "media-src data: blob: https:",
+  "connect-src https:",
+  "frame-src 'none'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'",
+].join("; ");
+
+// evita que un "</script>" en el codigo del usuario cierre la etiqueta
+// del sandbox y se interprete el resto como html
+function escaparScript(code: string): string {
+  return code.replace(/<\/(script)/gi, "<\\/$1");
+}
+
 export function buildSandboxHTML(code: string): string {
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="${SANDBOX_CSP}" />
+  <meta name="referrer" content="no-referrer" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -62,7 +86,7 @@ export function buildSandboxHTML(code: string): string {
 })();
 
 try {
-${code}
+${escaparScript(code)}
 } catch(e) {
   console.error(e.message || String(e));
 }

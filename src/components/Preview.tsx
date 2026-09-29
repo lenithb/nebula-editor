@@ -13,6 +13,8 @@ interface PreviewProps {
 
 type Viewport = "desktop" | "tablet" | "mobile";
 
+const NIVELES_VALIDOS: readonly ConsoleLevel[] = ["log", "warn", "error", "info"];
+
 export function Preview({
   code,
   runKey,
@@ -42,13 +44,14 @@ export function Preview({
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
-      if (
-        event.data &&
-        typeof event.data === "object" &&
-        event.data.type === "console"
-      ) {
-        onConsoleMessage(event.data.level as ConsoleLevel, event.data.message);
-      }
+      // solo aceptamos mensajes que vengan del iframe de preview
+      if (event.source !== iframeRef.current?.contentWindow) return;
+
+      const data = event.data;
+      if (!data || typeof data !== "object" || data.type !== "console") return;
+      if (!NIVELES_VALIDOS.includes(data.level)) return;
+
+      onConsoleMessage(data.level as ConsoleLevel, String(data.message ?? ""));
     }
 
     window.addEventListener("message", handleMessage);
@@ -143,6 +146,7 @@ export function Preview({
                 ref={iframeRef}
                 className="preview-iframe"
                 sandbox="allow-scripts"
+                referrerPolicy="no-referrer"
                 title={t.codePreview}
               />
             </div>

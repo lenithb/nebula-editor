@@ -7,7 +7,15 @@ export function useLocalStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+      if (item === null) return initialValue;
+      const parsed: unknown = JSON.parse(item);
+      // si el valor guardado no tiene el tipo esperado (storage editado
+      // a mano o de una version vieja), usamos el valor inicial
+      if (typeof parsed !== typeof initialValue) return initialValue;
+      if (typeof parsed === "number" && !Number.isFinite(parsed)) {
+        return initialValue;
+      }
+      return parsed as T;
     } catch {
       return initialValue;
     }

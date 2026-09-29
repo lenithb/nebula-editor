@@ -1652,6 +1652,28 @@ button {
   transform: translate(0, -50%);
 }
 
+/* tooltips pegados a un borde: se alinean al boton para no chocar con el borde */
+.sidebar-toggle[data-tooltip]::after {
+  left: 0;
+  transform: translate(0, -2px);
+}
+
+.sidebar-toggle[data-tooltip]:hover::after,
+.sidebar-toggle[data-tooltip]:focus-visible::after {
+  transform: translate(0, 0);
+}
+
+.editor-toolbar [data-tooltip]::after {
+  right: 0;
+  left: auto;
+  transform: translate(0, -2px);
+}
+
+.editor-toolbar [data-tooltip]:hover::after,
+.editor-toolbar [data-tooltip]:focus-visible::after {
+  transform: translate(0, 0);
+}
+
 .toast-success {
   position: fixed;
   z-index: 9999;
