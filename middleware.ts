@@ -2,6 +2,17 @@ export const config = {
   matcher: "/",
 };
 
+// mismas cabeceras que vercel.json, porque esta respuesta las puede saltear
+const SECURITY_HEADERS = {
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "permissions-policy":
+    "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+  "content-security-policy":
+    "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+};
+
 export default async function middleware(request: Request) {
   const url = new URL(request.url);
   const acceptLanguage = request.headers.get("accept-language") ?? "";
@@ -13,7 +24,10 @@ export default async function middleware(request: Request) {
   if (!upstream.ok) {
     return new Response(upstream.body, {
       status: upstream.status,
-      headers: { "content-type": "text/html; charset=utf-8" },
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        ...SECURITY_HEADERS,
+      },
     });
   }
 
@@ -28,6 +42,7 @@ export default async function middleware(request: Request) {
     headers: {
       "content-type": "text/html; charset=utf-8",
       "cache-control": "no-store",
+      ...SECURITY_HEADERS,
     },
   });
 }
