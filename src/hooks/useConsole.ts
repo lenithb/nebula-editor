@@ -1,5 +1,9 @@
 import { useState, useCallback, useRef } from "react";
 
+// limites para que un console.log en bucle no sature la memoria de la pestaña
+const MAX_ENTRADAS = 500;
+const MAX_LARGO_MENSAJE = 10_000;
+
 export type ConsoleLevel = "log" | "warn" | "error" | "info";
 
 export interface ConsoleEntry {
@@ -25,10 +29,16 @@ export function useConsole(): UseConsoleReturn {
     const entry: ConsoleEntry = {
       id: `entry-${++idRef.current}`,
       level,
-      message,
+      message:
+        message.length > MAX_LARGO_MENSAJE
+          ? `${message.slice(0, MAX_LARGO_MENSAJE)}…`
+          : message,
       timestamp: new Date(),
     };
-    setEntries((prev) => [...prev, entry]);
+    setEntries((prev) => {
+      const next = [...prev, entry];
+      return next.length > MAX_ENTRADAS ? next.slice(-MAX_ENTRADAS) : next;
+    });
   }, []);
 
   const clearEntries = useCallback(() => {

@@ -45,7 +45,7 @@ type RunStatus = "idle" | "running" | "success" | "error";
 
 // v4 starts from the current welcome example once, then resumes local auto-save.
 const STORAGE_VERSION = "v4";
-(function migrateStoredCode() {
+function migrateStoredCode() {
   const storedVersion = localStorage.getItem("nebula-js:version");
   if (storedVersion === STORAGE_VERSION) return;
 
@@ -71,7 +71,13 @@ const STORAGE_VERSION = "v4";
     localStorage.removeItem("nebula-js:code");
   }
   localStorage.setItem("nebula-js:version", STORAGE_VERSION);
-})();
+}
+
+try {
+  migrateStoredCode();
+} catch {
+  // sin acceso a localstorage (modo privado o bloqueado): seguimos igual
+}
 
 export function App() {
   const [code, setCode] = useLocalStorage("nebula-js:code", DEFAULT_CODE);
